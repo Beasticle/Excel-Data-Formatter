@@ -1,31 +1,35 @@
 from collections import defaultdict
 import pandas as pd
 
-workbook = pd.read_excel("EMEATeamsPermissions.xlsx", sheet_name="EMEATeamsPermissions")
+print("Please put your excel workbook in the same folder as this script. All spelling needs to be exact.")
+
+sheetName = input("What is the name of your sheet?")
+
+indexCol = input('What column is going to be your index?')
+
+columns = input("What columns is your data in? If you have multiple columns, please format them as 'Col1, Col2, etc'")
+
+workbook = pd.read_excel("*.xlsx", sheet_name=sheetName)
 workbook.head()
 
-memberDict = defaultdict(list)
+indexDict = defaultdict(list)
+dataColList = columns.split(", ")
 
-for index, domainName in enumerate(workbook['Member Mail']):
-    print(domainName + f" {index}")
+for index, data in enumerate(workbook['Member Mail']):
 
-    if domainName == workbook['Member Mail'].iloc[index]:
+    if data == workbook['Member Mail'].iloc[index]:
 
-        print(domainName + " " + workbook['Member Mail'].iloc[index].split('@')[1] + f"\n")
+        print(data + " " + workbook['Member Mail'].iloc[index].split('@')[1] + f"\n")
 
-        if workbook['Member Mail'].iloc[index].split('@')[1] not in memberDict:
-            memberDict[workbook['Member Mail'].iloc[index].split('@')[1]] = [workbook['Member Name'].iloc[index]]
-            if workbook['Member Name'].iloc[index] not in memberDict[workbook['Member Mail'].iloc[index].split('@')[1]]:
-                memberDict[workbook['Member Mail'].iloc[index].split('@')[1]].append(workbook['Member Name'].iloc[index])
-            else:
-                print("Value is already in that list")
+        if workbook['Member Mail'].iloc[index].split('@')[1] not in indexDict and workbook['Member Mail'].iloc[index].split('@')[1] in dataColList: # or 'smc.uk':
+            indexDict[workbook[indexCol].iloc[index]] = [workbook['Member Mail'].iloc[index].split('@')[1], workbook['Teams Name'].iloc[index], workbook['Role'].iloc[index]]
+
+        elif workbook['Member Mail'].iloc[index].split('@')[1] in dataColList: # or 'smc.uk':
+            indexDict[workbook[indexCol].iloc[index]].extend([workbook['Member Mail'].iloc[index].split('@')[1], workbook['Teams Name'].iloc[index], workbook['Role'].iloc[index]])
         else:
-            if workbook['Member Name'].iloc[index] not in memberDict[workbook['Member Mail'].iloc[index].split('@')[1]]:
-                memberDict[workbook['Member Mail'].iloc[index].split('@')[1]].append(workbook['Member Name'].iloc[index])
-            else:
-                print("Value is already in that list")
+            print("Value is already in that list or not valid")
 
         if index == 7229:
-            df = pd.DataFrame.from_dict(memberDict, orient='index')
-            df.to_excel("Test.xlsx", sheet_name="Memberoutput")
-            print("member list: " + f'{memberDict}')
+            df = pd.DataFrame.from_dict(indexDict , orient='index')
+            df.to_excel("/Output/Test.xlsx", sheet_name="Memberoutput")
+            print("member list: " + f'{indexDict }')
