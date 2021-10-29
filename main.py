@@ -18,10 +18,12 @@ workbook.head()
 
 indexDict = defaultdict(list)
 colList = columns.split(", ")
-
-for data in colList:
-    columnList = []
-    # problem is here, idfk
+filerList = filterInput.split(', ')
+columnList = []
+filterListFull = []
+for data in range(len(filerList)):
+     filterListFull.append(filerList[data].strip(', '))
+for data in range(len(colList)):
     columnList.append(colList[data].strip(', '))
 
 filterList = filterInput.split(", ")
@@ -32,10 +34,13 @@ for index, data in enumerate(workbook[indexCol]):
         print(columnList)    
         print(data, index)
 
-        if workbook[columnList[0]].iloc[index].split('@')[1] not in indexDict and workbook[columnList[0]].iloc[index].split('@')[1] in filterList:
+        # for columnNumber in range(1,len(columnList)):
+        #     if workbook[columnList[columnNumber]].iloc
+
+        if workbook[columnList[0]].iloc[index].split('@')[1] not in indexDict and workbook[columnList[0]].iloc[index].split('@')[1] in filterListFull:
             indexDict[workbook[indexCol].iloc[index]] = [workbook[columnList[0]].iloc[index].split('@')[1], workbook[columnList[1]].iloc[index], workbook[columnList[2]].iloc[index]]
 
-        elif workbook[colList[0]].iloc[index].split('@')[1] in filterList:
+        elif workbook[colList[0]].iloc[index].split('@')[1] in filterListFull:
             indexDict[workbook[indexCol].iloc[index]].extend([workbook[columnList[0]].iloc[index].split('@')[1], workbook[columnList[1]].iloc[index], workbook[columnList[2]].iloc[index]])
         else:
             print("Value is already in that list or not valid")
