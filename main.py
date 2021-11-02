@@ -18,13 +18,24 @@ workbook.head()
 
 indexDict = defaultdict(list)
 colList = columns.split(", ")
-filerList = filterInput.split(', ')
+filterList = filterInput.split(', ')
+stringToParse = ""
+string1 = ""
+string2 = ""
 columnList = []
 filterListFull = []
-for data in range(len(filerList)):
-     filterListFull.append(filerList[data].strip(', '))
+for data in range(len(filterList)):
+     filterListFull.append(filterList[data].strip(', '))
 for data in range(len(colList)):
     columnList.append(colList[data].strip(', '))
+
+for data in columnList:
+    if "@" in workbook[data].iloc[0]:
+        stringToParse = data
+    elif string1 == "":
+        string1 = data
+    elif string1 != "":
+        string2 = data
 
 filterList = filterInput.split(", ")
 
@@ -34,14 +45,11 @@ for index, data in enumerate(workbook[indexCol]):
         print(columnList)    
         print(data, index)
 
-        # for columnNumber in range(1,len(columnList)):
-        #     if workbook[columnList[columnNumber]].iloc
+        if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
+            indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1], workbook[string1].iloc[index], workbook[string2].iloc[index]]
 
-        if workbook[columnList[0]].iloc[index].split('@')[1] not in indexDict and workbook[columnList[0]].iloc[index].split('@')[1] in filterListFull:
-            indexDict[workbook[indexCol].iloc[index]] = [workbook[columnList[0]].iloc[index].split('@')[1], workbook[columnList[1]].iloc[index], workbook[columnList[2]].iloc[index]]
-
-        elif workbook[colList[0]].iloc[index].split('@')[1] in filterListFull:
-            indexDict[workbook[indexCol].iloc[index]].extend([workbook[columnList[0]].iloc[index].split('@')[1], workbook[columnList[1]].iloc[index], workbook[columnList[2]].iloc[index]])
+        elif workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
+            indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1], workbook[string1].iloc[index], workbook[string2].iloc[index]])
         else:
             print("Value is already in that list or not valid")
 
