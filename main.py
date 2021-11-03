@@ -30,19 +30,6 @@ for data in range(len(filterList)):
 for data in range(len(colList)):
     columnList.append(colList[data].strip(', '))
 
-for data in columnList:
-    if "@" not in workbook[data].iloc[0]:
-        for i in range(len(workbook[data])):
-            globals()[f"string{i}"] = data
-            noformat = True
-    else: 
-        if "@" in workbook[data].iloc[0]:
-            stringToParse = data
-            noformat = False
-        else:
-            for i in enumerate(workbook[data], start=1):
-                globals()[f"string{i}"] = data
-
 filterList = filterInput.split(", ")
 
 def formatFunction():
@@ -52,12 +39,18 @@ def formatFunction():
         if data == workbook[indexCol].iloc[index]:
             print(columnList)    
             print(data, index)
-
+            
             if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
-                indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1], workbook[string1].iloc[index], workbook[string2].iloc[index]]
+                indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
+                for i in columnList:
+                    #if i not in stringToParse:
+                    indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
-                indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1], workbook[string1].iloc[index], workbook[string2].iloc[index]])
+                indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1]])
+                for i in columnList:
+                    #if i not in stringToParse:
+                    indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
@@ -86,7 +79,16 @@ def noFormattingFunction():
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict }')
 
-if noformat == True:
-    formatFunction()
-else:
-    noFormattingFunction()
+for col in columnList:
+    if "@" not in workbook[col].iloc[0]:
+        for i in range(len(workbook[data])):
+            globals()[f"string{i}"] = data
+            noFormattingFunction()
+    else: 
+        # problem here, idfk
+        if "@" in workbook[data].iloc[0]:
+            stringToParse = data
+            formatFunction()
+        else:
+            for i in enumerate(workbook[data], start=1):
+                globals()[f"string{i}"] = data
