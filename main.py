@@ -17,12 +17,11 @@ filterInput = input("\n What do you want to filter by, eg. scm.uk? ")
 workbook = pd.read_excel(f"{workbookName}.xlsx", sheet_name=sheetName)
 workbook.head()
 
+ran = False
 indexDict = defaultdict(list)
 colList = columns.split(", ")
 filterList = filterInput.split(', ')
 stringToParse = ""
-# string1 = ""
-# string2 = ""
 columnList = []
 filterListFull = []
 for data in range(len(filterList)):
@@ -32,13 +31,18 @@ for data in range(len(colList)):
 
 filterList = filterInput.split(", ")
 
-def formatFunction():
+if filterListFull == []:
+    for index in range(len(workbook[indexCol])):
+        filterListFull.append(workbook[indexCol].iloc[index])
 
+
+def formatFunction():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index]:
+        if data == workbook[indexCol].iloc[index] and ran == False:
             print(columnList)    
             print(data, index)
+            print(filterListFull)
             
             if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
@@ -58,19 +62,25 @@ def formatFunction():
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict }')
+                break
+                exit
 
 def noFormattingFunction():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index]:
+        if data == workbook[indexCol].iloc[index] and ran == False:
             print(columnList)    
             print(data, index)
+            print(filterListFull)
 
             if workbook[string0].iloc[index] not in indexDict and workbook[string0].iloc[index] in filterListFull:
-                indexDict[workbook[indexCol].iloc[index]] = [workbook[string0].iloc[index], workbook[string1].iloc[index], workbook[string2].iloc[index]]
+                indexDict[workbook[indexCol].iloc[index]] = []
+                for i in columnList:
+                    indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[string0].iloc[index] in filterListFull:
-                indexDict[workbook[indexCol].iloc[index]].extend([workbook[string0].iloc[index], workbook[string1].iloc[index], workbook[string2].iloc[index]])
+                for i in columnList:
+                    indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
@@ -78,17 +88,28 @@ def noFormattingFunction():
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict }')
+                break
+                exit
+
 
 for col in columnList:
-    if "@" not in workbook[col].iloc[0]:
-        for i in range(len(workbook[data])):
-            globals()[f"string{i}"] = data
-            noFormattingFunction()
+    if str('@') not in [workbook[col].iloc[0]]:
+        for i in range(len(workbook[col])):
+            print(i)
+            globals()[f"string{i}"] = col
+            noFormat = True
+            ran = True
     else: 
-        # problem here, idfk
-        if "@" in workbook[data].iloc[0]:
-            stringToParse = data
-            formatFunction()
+        if str('@') in [workbook[col].iloc[0]]:
+            noFormat = False
+            stringToParse = col
+            ran = True
         else:
-            for i in enumerate(workbook[data], start=1):
-                globals()[f"string{i}"] = data
+            for i in enumerate(workbook[col], start=1):
+                globals()[f"string{i}"] = col
+                ran = True
+
+if noFormat:
+    noFormattingFunction()
+else:
+    formatFunction()
