@@ -14,7 +14,12 @@ columns = input("\n What columns is your data in? If you have multiple columns, 
 
 filterInput = input("\n What do you want to filter by, eg. scm.uk? ")
 
-ran = False
+workbook = pd.read_excel(f"{workbookName}.xlsx", sheet_name=sheetName)
+workbook.head()
+
+noFiltering = False
+noFormating = False
+
 indexDict = defaultdict(list)
 colList = columns.split(", ")
 filterList = filterInput.split(', ')
@@ -23,17 +28,14 @@ columnList = []
 filterListFull = []
 filterList = filterInput.split(", ")
 
-workbook = pd.read_excel(f"{workbookName}.xlsx", sheet_name=sheetName)
-workbook.head()
+for data in range(len(filterList)):
+    print("stripping filters")
+    filterListFull.append(filterList[data].strip(', '))
+for data in range(len(colList)):
+    print("stripping columns")
+    columnList.append(colList[data].strip(', '))
 
 print(filterInput)
-
-# for data in range(len(filterList)):
-#     print("stripping filters")
-#     filterListFull.append(filterList[data].strip(', '))
-# for data in range(len(colList)):
-#     print("stripping columns")
-#     columnList.append(colList[data].strip(', '))
 
 # if filterListFull == []:
 #     filterListFull = []
@@ -47,21 +49,22 @@ print(filterInput)
 def formatFunction():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index] and ran == False:
+        if data == workbook[indexCol].iloc[index]:
             print(columnList)    
             print(stringToParse)
+            print(filterList)
             print(filterListFull)
             
             if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
                 for i in columnList:
-                    print("Formatting, not in dict yet " + workbook[i].iloc[index])
+                    # print("Formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1]])
                 for i in columnList:
-                    print("Formatting, in dict already " + workbook[i].iloc[index])
+                    # print("Formatting, in dict already " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
@@ -75,7 +78,7 @@ def formatFunction():
 def noFormattingFunction():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index] and ran == False:
+        if data == workbook[indexCol].iloc[index]:
             print(columnList)    
             print(data, index)
             print(filterListFull)
@@ -83,12 +86,12 @@ def noFormattingFunction():
             if workbook[string0].iloc[index] not in indexDict and workbook[string0].iloc[index] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = []
                 for i in columnList:
-                    print("No formatting, not in dict yet " + workbook[i].iloc[index])
+                    # print("No formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[string0].iloc[index] in filterListFull:
                 for i in columnList:
-                    print("No formatting, in dict already " + workbook[i].iloc[index])
+                    # print("No formatting, in dict already " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
@@ -101,7 +104,7 @@ def noFormattingFunction():
 def noFormattingNoFilter():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index] and ran == False:
+        if data == workbook[indexCol].iloc[index]:
             print(columnList)    
             print(data, index)
             print(filterListFull)
@@ -109,7 +112,7 @@ def noFormattingNoFilter():
             if workbook[string0].iloc[index] not in indexDict: #and workbook[string0].iloc[index] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = []
                 for i in columnList:
-                    print("No formatting, not in dict yet " + workbook[i].iloc[index])
+                    # print("No formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             # elif workbook[string0].iloc[index]: # in filterListFull:
@@ -128,7 +131,7 @@ def noFormattingNoFilter():
 def formatNoFilter():
     for index, data in enumerate(workbook[indexCol]):
 
-        if data == workbook[indexCol].iloc[index] and ran == False:
+        if data == workbook[indexCol].iloc[index]:
             print(columnList)    
             print(stringToParse)
             print(filterListFull)
@@ -136,14 +139,8 @@ def formatNoFilter():
             if workbook[stringToParse].iloc[index].split('@')[1]: # not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
                 for i in columnList:
-                    print("Formatting, not in dict yet " + workbook[i].iloc[index])
+                    # print("Formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
-
-            # elif workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
-            #     indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1]])
-            #     for i in columnList:
-            #         print("Formatting, in dict already " + workbook[i].iloc[index])
-            #         indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
@@ -153,47 +150,47 @@ def formatNoFilter():
                 print("member list: " + f'{indexDict}')
                 break
 
-
-for col in columnList:
-    if '@' not in [workbook[col].iloc[0]]:
-        if filterListFull == []:
-            for i in range(len(workbook[col])):
-                #print(i)
-                globals()[f"string{i}"] = col
-                if i >= len(columnList):
-                    noFormattingNoFilter()
-                    ran = True
-                    break
-        else:
-            for i in range(len(workbook[col])):
-                #print(i)
-                globals()[f"string{i}"] = col
-                if i >= len(columnList):
-                    noFormattingFunction()
-                    ran = True
-                    break
-    else: 
-        if '@' in [workbook[col].iloc[0]]:
-            stringToParse = col
-            ran = True
-        else:
+def decisionFunction():
+    global noFormat, noFiltering, stringToParse, string0
+    for col in columnList:
+        print(exec)
+        if '@' not in [workbook[col].iloc[0]]:
             if filterListFull == []:
-                for i in enumerate(workbook[col], start=1):
-                    if i == 1:
-                        string0 = col
-                    elif i >= len(columnList):
-                        formatNoFilter()
-                        ran = True
-                        break
-                    else:
-                        globals()[f"string{i}"] = col
+                noFormat = True
+                noFiltering = True
+                for i in range(len(workbook[col])):
+                    exec(f'string{i} = col')
+                        
             else:
-                for i in enumerate(workbook[col], start=1):
-                    if i == 1:
-                        string0 = col
-                    elif i >= len(columnList):
-                        formatFunction()
-                        ran = True
-                        break
-                    else:
-                        globals()[f"string{i}"] = col
+                noFormat = True
+                for i in range(len(workbook[col])):
+                    exec(f'string{i} = col')
+        else: 
+            if '@' in [workbook[col].iloc[0]]:
+                stringToParse = col
+                
+            else:
+                if filterListFull == []:
+                    noFiltering = True
+                    for i in enumerate(workbook[col], start=1):
+                        if i == 1:
+                            string0 = col
+                        else:
+                            exec(f'string{i} = col')
+                else:
+                    for i in enumerate(workbook[col], start=1):
+                        if i == 1:
+                            string0 = col
+                        else:
+                            exec(f'string{i} = col')
+
+decisionFunction()
+
+if noFiltering == False and noFormat == False:
+    formatFunction()
+elif noFiltering == False and noFormat:
+    noFormattingFunction()
+elif noFiltering and noFormat:
+    noFormattingNoFilter()
+else:
+    formatNoFilter()
