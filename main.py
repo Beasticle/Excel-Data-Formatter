@@ -158,13 +158,13 @@ def decisionFunction():
             if filterListFull == []:
                 noFormat = True
                 noFiltering = True
-                for i in range(len(workbook[col])):
-                    exec(f'string{i} = col')
+                for i in range(1, len(columnList)):
+                    globals()[f'string{i}'] = col
                         
             else:
                 noFormat = True
-                for i in range(len(workbook[col])):
-                    exec(f'string{i} = col')
+                for i in range(len(columnList)):
+                    globals()[f'string{i}'] = col
         else: 
             if '@' in [workbook[col].iloc[0]]:
                 stringToParse = col
@@ -172,17 +172,17 @@ def decisionFunction():
             else:
                 if filterListFull == []:
                     noFiltering = True
-                    for i in enumerate(workbook[col], start=1):
+                    for i in range(1, len(columnList)):
                         if i == 1:
                             string0 = col
                         else:
-                            exec(f'string{i} = col')
+                            globals()[f'string{i}'] = col
                 else:
-                    for i in enumerate(workbook[col], start=1):
+                    for i in range(1, len(columnList)):
                         if i == 1:
                             string0 = col
                         else:
-                            exec(f'string{i} = col')
+                            globals()[f'string{i}'] = col
 
 decisionFunction()
 
