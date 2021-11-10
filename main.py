@@ -1,5 +1,4 @@
 from collections import defaultdict
-from numpy import character
 import pandas as pd
 
 print("\n Please put your excel workbook in the same folder as this script. All spelling needs to be exact.")
@@ -58,22 +57,21 @@ def formatFunction():
             if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
                 for i in columnList:
-                    # print("Formatting, not in dict yet " + workbook[i].iloc[index])
+                    print("Formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]].extend([workbook[stringToParse].iloc[index].split('@')[1]])
                 for i in columnList:
-                    # print("Formatting, in dict already " + workbook[i].iloc[index])
+                    print("Formatting, in dict already " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
-            if index == 7229:
+            if index >= 7229:
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict}')
-                break
 
 def noFormattingFunction():
     for index, data in enumerate(workbook[indexCol]):
@@ -86,21 +84,22 @@ def noFormattingFunction():
             if workbook[string0].iloc[index] not in indexDict and workbook[string0].iloc[index] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = []
                 for i in columnList:
-                    # print("No formatting, not in dict yet " + workbook[i].iloc[index])
+                    print("No formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             elif workbook[string0].iloc[index] in filterListFull:
                 for i in columnList:
-                    # print("No formatting, in dict already " + workbook[i].iloc[index])
+                    print("No formatting, in dict already " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
-            if index == 7229:
+            if index >= 7229:
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict }')
-                break
+                
+
 def noFormattingNoFilter():
     for index, data in enumerate(workbook[indexCol]):
 
@@ -112,7 +111,7 @@ def noFormattingNoFilter():
             if workbook[string0].iloc[index] not in indexDict: #and workbook[string0].iloc[index] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = []
                 for i in columnList:
-                    # print("No formatting, not in dict yet " + workbook[i].iloc[index])
+                    print("No formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
 
             # elif workbook[string0].iloc[index]: # in filterListFull:
@@ -122,11 +121,10 @@ def noFormattingNoFilter():
             else:
                 print("Value is already in that list or not valid")
 
-            if index == 7229:
+            if index >= 7229:
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict }')
-                break
 
 def formatNoFilter():
     for index, data in enumerate(workbook[indexCol]):
@@ -139,12 +137,12 @@ def formatNoFilter():
             if workbook[stringToParse].iloc[index].split('@')[1]: # not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
                 indexDict[workbook[indexCol].iloc[index]] = [workbook[stringToParse].iloc[index].split('@')[1]]
                 for i in columnList:
-                    # print("Formatting, not in dict yet " + workbook[i].iloc[index])
+                    print("Formatting, not in dict yet " + workbook[i].iloc[index])
                     indexDict[workbook[indexCol].iloc[index]].extend([workbook[i].iloc[index]])
             else:
                 print("Value is already in that list or not valid")
 
-            if index == 7229:
+            if index >= 7229:
                 df = pd.DataFrame.from_dict(indexDict , orient='index')
                 df.to_excel("Test.xlsx", sheet_name="Memberoutput")
                 print("member list: " + f'{indexDict}')
