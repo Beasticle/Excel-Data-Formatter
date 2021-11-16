@@ -22,7 +22,7 @@ noFormating = False
 indexDict = defaultdict(list)
 colList = columns.split(", ")
 filterList = filterInput.split(', ')
-stringToParse = ""
+stringToParse = ''
 columnList = []
 filterListFull = []
 filterList = filterInput.split(", ")
@@ -150,40 +150,41 @@ def formatNoFilter():
 
 def decisionFunction():
     global noFormat, noFiltering, stringToParse, string0
-    for col in columnList:
-        print(exec)
+    for i, col in enumerate(columnList):
+        print(i)
         if '@' not in [workbook[col].iloc[0]]:
             if filterListFull == []:
                 noFormat = True
                 noFiltering = True
-                for i in range(1, len(columnList)):
-                    globals()[f'string{i}'] = col
+                # for i in range(1, len(columnList)):
+                globals()[f'string{i}'] = col
                         
             else:
                 noFormat = True
-                for i in range(len(columnList)):
-                    globals()[f'string{i}'] = col
+                # for i in range(len(columnList)):
+                globals()[f'string{i}'] = col
         else: 
             if '@' in [workbook[col].iloc[0]]:
                 stringToParse = col
+                print(stringToParse)
                 
             else:
                 if filterListFull == []:
                     noFiltering = True
-                    for i in range(1, len(columnList)):
-                        if i == 1:
-                            string0 = col
-                        else:
-                            globals()[f'string{i}'] = col
+                    #for i in range(1, len(columnList)):
+                    if i == 0:
+                        string0 = col
+                    else:
+                        globals()[f'string{i}'] = col
                 else:
-                    for i in range(1, len(columnList)):
-                        if i == 1:
-                            string0 = col
-                        else:
-                            globals()[f'string{i}'] = col
+                    # for i in range(1, len(columnList)):
+                    if i == 0:
+                        string0 = col
+                    else:
+                        globals()[f'string{i}'] = col
 
 decisionFunction()
-
+print(globals())
 if noFiltering == False and noFormat == False:
     formatFunction()
 elif noFiltering == False and noFormat:
