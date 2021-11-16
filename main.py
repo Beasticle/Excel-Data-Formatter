@@ -17,7 +17,7 @@ workbook = pd.read_excel(f"{workbookName}.xlsx", sheet_name=sheetName)
 workbook.head()
 
 noFiltering = False
-noFormating = False
+noFormat = False
 
 indexDict = defaultdict(list)
 colList = columns.split(", ")
@@ -46,12 +46,14 @@ print(filterInput)
 
 
 def formatFunction():
+    global stringToParse
     for index, data in enumerate(workbook[indexCol]):
 
         if data == workbook[indexCol].iloc[index]:
-            print(columnList)    
+            print("formatting and filtering")
             print(stringToParse)
-            print(filterList)
+            print(columnList)    
+            print(data, index)
             print(filterListFull)
             
             if workbook[stringToParse].iloc[index].split('@')[1] not in indexDict and workbook[stringToParse].iloc[index].split('@')[1] in filterListFull:
@@ -77,6 +79,7 @@ def noFormattingFunction():
     for index, data in enumerate(workbook[indexCol]):
 
         if data == workbook[indexCol].iloc[index]:
+            print("no formatting")
             print(columnList)    
             print(data, index)
             print(filterListFull)
@@ -104,6 +107,7 @@ def noFormattingNoFilter():
     for index, data in enumerate(workbook[indexCol]):
 
         if data == workbook[indexCol].iloc[index]:
+            print("no formatting or filtering")
             print(columnList)    
             print(data, index)
             print(filterListFull)
@@ -130,6 +134,7 @@ def formatNoFilter():
     for index, data in enumerate(workbook[indexCol]):
 
         if data == workbook[indexCol].iloc[index]:
+            print("format, no filter")
             print(columnList)    
             print(stringToParse)
             print(filterListFull)
@@ -152,7 +157,8 @@ def decisionFunction():
     global noFormat, noFiltering, stringToParse, string0
     for i, col in enumerate(columnList):
         print(i)
-        if '@' not in [workbook[col].iloc[0]]:
+        print(workbook[col].iloc[0])
+        if '@' not in workbook[col].iloc[0]:
             if filterListFull == []:
                 noFormat = True
                 noFiltering = True
@@ -160,11 +166,12 @@ def decisionFunction():
                 globals()[f'string{i}'] = col
                         
             else:
-                noFormat = True
+                
                 # for i in range(len(columnList)):
                 globals()[f'string{i}'] = col
         else: 
-            if '@' in [workbook[col].iloc[0]]:
+            if '@' in workbook[col].iloc[0]:
+                
                 stringToParse = col
                 print(stringToParse)
                 
@@ -184,10 +191,10 @@ def decisionFunction():
                         globals()[f'string{i}'] = col
 
 decisionFunction()
-print(globals())
-if noFiltering == False and noFormat == False:
+#print(globals())
+if not noFiltering and not noFormat:
     formatFunction()
-elif noFiltering == False and noFormat:
+elif not noFiltering and noFormat:
     noFormattingFunction()
 elif noFiltering and noFormat:
     noFormattingNoFilter()
